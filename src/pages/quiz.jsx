@@ -4,10 +4,18 @@ import './quiz.css'
 
 const Quiz = () =>{
     const [question, setQuestion] = useState(1)
+    const [answers, setAnswers] = useState([])
     const presentQuestion = Data.filter(each => (each.id === question))
-    console.log(presentQuestion)
+    
+    const selectedOption = (id, type) =>{
+        const updated = [...answers]
+        updated[id] = {type}
+        setAnswers(updated)
+    }
+    
+
     const onClickNext = () =>{
-        if (question < Data.length+1){
+        if (question < Data.length){
             setQuestion(prevState => prevState + 1)
         }  
     }
@@ -17,16 +25,20 @@ const Quiz = () =>{
             setQuestion(prevState => prevState - 1)
         }
     }
-
+    console.log(answers)
+    
     return(
         <div>
             <div className="main-container">
                 <h1 className="question">{presentQuestion[0].id}.  {presentQuestion[0].question}</h1>
-                {presentQuestion[0].options.map(every =>(
-                <button className="options">
-                    <img src = {every.img} className="image"/>
-                    {every.text}</button>)
-                )}
+                <div className="options-card">
+                    {presentQuestion[0].options.map(every =>(
+                    <button className="options" key={every.type} onClick={() => selectedOption(every.type, presentQuestion[0].id)}>
+                        <img src = {every.img} className="image" />
+                        <p>{every.text}</p>
+                    </button>
+                    ))}
+                </div>
                 
             </div>
 
